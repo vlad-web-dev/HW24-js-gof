@@ -2,10 +2,14 @@ class PubSub {
     constructor() {
         this.handlers = [];
     }
+
     subscribe(event, handler, context) {
-        if (typeof context === 'undefined') { context = handler; }
-        this.handlers.push({ event: event, handler: handler.bind(context) });
+        if (typeof context === 'undefined') {
+            context = handler;
+        }
+        this.handlers.push({event: event, handler: handler.bind(context)});
     }
+
     publish(event, args) {
         this.handlers.forEach((topic) => {
             if (topic.event === event) {
@@ -35,10 +39,10 @@ var Billy = (function () {
 
     return {
         setMsg(msg) {
-        messages.push(msg)
-        return messages
+            messages.push(msg)
+            return messages
+        }
     }
-}
 })();
 var Rozy = (function () {
     var messages = []
@@ -66,15 +70,15 @@ mediator.attachToObject(Rozy)
 mediator.attachToObject(Billy)
 mediator.attachToObject(Jack)
 
-Rozy.subscribe('rozy-from-billy', function(msg) {
+Rozy.subscribe('rozy-from-billy', function (msg) {
     console.group('Billy sent first')
     Billy.setMsg(msg)
     console.log(msg)
-    Jack.publish('rozy-to-jack','Sorry, i love Billy')
+    Jack.publish('rozy-to-jack', 'Sorry, i love Billy')
     console.groupEnd()
 }, Rozy);
 
-Rozy.subscribe('rozy-from-jack', function(msg) {
+Rozy.subscribe('rozy-from-jack', function (msg) {
     console.group('Jack sent first')
     Jack.setMsg(msg)
     console.log(msg)
@@ -83,14 +87,14 @@ Rozy.subscribe('rozy-from-jack', function(msg) {
 }, Rozy);
 
 
-Billy.subscribe('rozy-to-billy', function(msg) {
+Billy.subscribe('rozy-to-billy', function (msg) {
     console.group('rozy-to-billy')
     Rozy.setMsg(msg)
     console.log(msg)
     console.groupEnd()
 }, Billy);
 
-Jack.subscribe('rozy-to-jack', function(msg) {
+Jack.subscribe('rozy-to-jack', function (msg) {
     console.group('rozy-to-jack')
     Rozy.setMsg(msg)
     console.log(msg)
