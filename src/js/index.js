@@ -42,7 +42,7 @@ var Billy = (function () {
             messages.push(msg)
             return messages
         },
-        subscribeOn(channel, event){
+        subscribeOn(channel, event) {
             {
                 this.subscribe(channel, event);
             }
@@ -73,7 +73,7 @@ var Jack = (function () {
             messages.push(msg)
             return messages
         },
-        subscribeOn(channel, event){
+        subscribeOn(channel, event) {
             {
                 this.subscribe(channel, event);
             }
@@ -86,7 +86,7 @@ mediator.attachToObject(Rozy)
 mediator.attachToObject(Billy)
 mediator.attachToObject(Jack)
 
-Rozy.subscribeOn('rozy-from-billy',function (msg) {
+Rozy.subscribeOn('rozy-from-billy', function (msg) {
     console.group('Billy sent first')
     Billy.setMsg(msg)
     console.log(msg)
