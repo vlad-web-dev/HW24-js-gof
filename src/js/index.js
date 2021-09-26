@@ -41,6 +41,11 @@ var Billy = (function () {
         setMsg(msg) {
             messages.push(msg)
             return messages
+        },
+        subscribeOn(channel, event){
+            {
+                this.subscribe(channel, event);
+            }
         }
     }
 })();
@@ -51,6 +56,12 @@ var Rozy = (function () {
         setMsg(msg) {
             messages.push(msg)
             return messages
+        },
+        sendMsg(channel, msg) {
+            this.publish(channel, msg)
+        },
+        subscribeOn(channel, event) {
+            this.subscribe(channel, event);
         }
     }
 })();
@@ -61,6 +72,11 @@ var Jack = (function () {
         setMsg(msg) {
             messages.push(msg)
             return messages
+        },
+        subscribeOn(channel, event){
+            {
+                this.subscribe(channel, event);
+            }
         }
     }
 })();
@@ -70,36 +86,34 @@ mediator.attachToObject(Rozy)
 mediator.attachToObject(Billy)
 mediator.attachToObject(Jack)
 
-Rozy.subscribe('rozy-from-billy', function (msg) {
+Rozy.subscribeOn('rozy-from-billy',function (msg) {
     console.group('Billy sent first')
     Billy.setMsg(msg)
     console.log(msg)
     Jack.publish('rozy-to-jack', 'Sorry, i love Billy')
     console.groupEnd()
-}, Rozy);
-
-Rozy.subscribe('rozy-from-jack', function (msg) {
-    console.group('Jack sent first')
-    Jack.setMsg(msg)
-    console.log(msg)
-    Billy.publish('rozy-to-billy', 'Sorry, i love Jack')
-    console.groupEnd()
-}, Rozy);
-
-
-Billy.subscribe('rozy-to-billy', function (msg) {
+});
+Rozy.subscribeOn('rozy-to-billy', function (msg) {
     console.group('rozy-to-billy')
     Rozy.setMsg(msg)
     console.log(msg)
     console.groupEnd()
-}, Billy);
+});
 
-Jack.subscribe('rozy-to-jack', function (msg) {
+
+Billy.subscribeOn('rozy-to-billy', function (msg) {
+    console.group('rozy-to-billy')
+    Rozy.setMsg(msg)
+    console.log(msg)
+    console.groupEnd()
+});
+
+Jack.subscribeOn('rozy-to-jack', function (msg) {
     console.group('rozy-to-jack')
     Rozy.setMsg(msg)
     console.log(msg)
     console.groupEnd()
-}, Jack);
+})
 
-// Rozy.publish('rozy-from-jack', 'hi Rozy, i love you')
-Rozy.publish('rozy-from-billy', 'hi Rozy, i love you')
+// Rozy.sendMsg('rozy-from-jack', 'hi Rozy, i love you')
+Rozy.sendMsg('rozy-from-billy', 'hi Rozy, i love you')
